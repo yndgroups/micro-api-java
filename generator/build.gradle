@@ -1,0 +1,34 @@
+jar{
+    enabled = true
+}
+
+bootJar {
+    enabled = true
+}
+
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.5")
+    }
+
+}
+
+dependencies {
+    implementation config.springBootStartWeb
+    implementation config.javax
+    implementation config.springBootStarterJdbc
+    implementation config.mybatisPlus
+    implementation config.mybatisPlusGenerator
+    implementation config.freemarker
+    implementation config.mysqlJava
+    implementation config.slf4j
+//    implementation config.log4j12
+    implementation config.log4j
+    testImplementation config.junitJupiterApi
+    testRuntimeOnly config.junitJupiterEngine
+}

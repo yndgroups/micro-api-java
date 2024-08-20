@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.RoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.common.entity.RoleEntity">
+        <id column="role_id" property="roleId"/>
+        <result column="app_id" property="appId"/>
+        <result column="name" property="name"/>
+        <result column="introduce" property="introduce"/>
+        <result column="sort_by" property="sortBy"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        role_id, app_id, `name`, introduce, unique_identification, sort_by, del_status, create_by, update_by,
+        create_time, update_time
+    </sql>
+
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE sys_role set del_status = 1, update_by = #{updateBy} WHERE role_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findRolePageList" resultType="ynd.common.pojo.vo.RoleListVo">
+        SELECT
+        A.role_id roleId,
+        A.app_id appId,
+        A.`name`,
+        A.introduce,
+        A.unique_identification uniqueIdentification,
+        A.sort_by sortBy,
+        A.del_status delStatus,
+        A.create_by createBy,
+        A.update_by updateBy,
+        A.create_time createTime,
+        A.update_time updateTime
+        FROM
+        sys_role A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.appId != null and params.appId != ''">
+                    and A.app_id = #{params.appId}
+                </if>
+            </if>
+        </where>
+        ORDER BY A.sort_by
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findRolePageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        sys_role A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.appId != null and params.appId != ''">
+                    and A.app_id = #{params.appId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

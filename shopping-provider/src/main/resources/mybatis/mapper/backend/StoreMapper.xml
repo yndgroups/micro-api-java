@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.shopping.modular.backend.mapper.StoreMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.shopping.modular.backend.entity.StoreEntity">
+        <id column="store_id" property="storeId"/>
+        <result column="address" property="address"/>
+        <result column="bail_paid" property="bailPaid"/>
+        <result column="email" property="email"/>
+        <result column="introduction" property="introduction"/>
+        <result column="enabled" property="enabled"/>
+        <result column="keyword" property="keyword"/>
+        <result column="logo" property="logo"/>
+        <result column="mobile" property="mobile"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="type" property="type"/>
+        <result column="zip_code" property="zipCode"/>
+        <result column="business_id" property="businessId"/>
+        <result column="store_category_id" property="storeCategoryId"/>
+        <result column="store_rank_id" property="storeRankId"/>
+        <result column="store_users" property="storeUsers"/>
+        <result column="store_no" property="storeNo"/>
+        <result column="area_tids" property="areaTids"/>
+        <result column="max_price" property="maxPrice"/>
+        <result column="extra_freight" property="extraFreight"/>
+        <result column="end_date" property="endDate"/>
+        <result column="version" property="version"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        store_id
+        , address, bail_paid, email, introduction, enabled, keyword, logo, mobile, name, phone, status, type, zip_code, business_id, store_category_id, store_rank_id, store_users, store_no, area_tids, max_price, extra_freight, end_date, version, del_status, create_by, update_by, create_time, update_time
+    </sql>
+
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_store set del_status = 1, update_by = #{updateBy} WHERE store_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="queryStorePageList" resultType="ynd.shopping.modular.backend.pojo.vo.StoreListVo">
+        SELECT
+        A.store_id storeId,
+        A.address,
+        A.bail_paid bailPaid,
+        A.email,
+        A.introduction,
+        A.enabled,
+        A.keyword,
+        A.logo,
+        A.mobile,
+        A.`name`,
+        A.phone,
+        A.status,
+        A.`type`,
+        A.zip_code zipCode,
+        A.business_id businessId,
+        A.store_category_id storeCategoryId,
+        A.store_rank_id storeRankId,
+        A.store_users storeUsers,
+        A.store_no storeNo,
+        A.area_tids areaTids,
+        A.max_price maxPrice,
+        A.extra_freight extraFreight,
+        A.end_date endDate,
+        A.version,
+        A.del_status delStatus,
+        A.create_by createBy,
+        A.update_by updateBy,
+        A.create_time createTime,
+        A.update_time updateTime
+        FROM
+        t_store A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.name != null and params.name != ''">
+                    AND A.`name` like concat("%",#{params.name},"%")
+                </if>
+                <if test="params.mobile != null and params.mobile != ''">
+                    AND A.mobile like concat("%",#{params.mobile},"%")
+                </if>
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="queryStorePageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        t_store A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.name != null and params.name != ''">
+                    AND A.`name` like concat("%",#{params.name},"%")
+                </if>
+                <if test="params.mobile != null and params.mobile != ''">
+                    AND A.mobile like concat("%",#{params.mobile},"%")
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

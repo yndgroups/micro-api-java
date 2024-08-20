@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.shopping.modular.backend.mapper.ProductSkuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.shopping.modular.backend.entity.ProductSkuEntity">
+        <id column="sku_id" property="skuId"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="product_id" property="productId"/>
+        <result column="sn" property="sn"/>
+        <result column="cost" property="cost"/>
+        <result column="price" property="price"/>
+        <result column="market_price" property="marketPrice"/>
+        <result column="allocated_stock" property="allocatedStock"/>
+        <result column="stock_warning_num" property="stockWarningNum"/>
+        <result column="stock_num" property="stockNum"/>
+        <result column="promote_vip_price" property="promoteVipPrice"/>
+        <result column="weight" property="weight"/>
+        <result column="promote_white_gold_price" property="promoteWhiteGoldPrice"/>
+        <result column="promote_diamond_price" property="promoteDiamondPrice"/>
+        <result column="promote_common_price" property="promoteCommonPrice"/>
+        <result column="whether_promote" property="whetherPromote"/>
+        <result column="promote_start_time" property="promoteStartTime"/>
+        <result column="prom_end_time" property="promEndTime"/>
+        <result column="vip_price" property="vipPrice"/>
+        <result column="white_gold_price" property="whiteGoldPrice"/>
+        <result column="diamond_price" property="diamondPrice"/>
+        <result column="common_price" property="commonPrice"/>
+        <result column="exchange_point" property="exchangePoint"/>
+        <result column="whether_default" property="whetherDefault"/>
+        <result column="max_commission" property="maxCommission"/>
+        <result column="reward_point" property="rewardPoint"/>
+        <result column="spec_items" property="specItems"/>
+        <result column="sync_flag" property="syncFlag"/>
+        <result column="store_no" property="storeNo"/>
+        <result column="sync_time" property="syncTime"/>
+        <result column="counter_no" property="counterNo"/>
+        <result column="counter_name" property="counterName"/>
+        <result column="unit" property="unit"/>
+        <result column="product_images" property="productImages"/>
+        <result column="version" property="version"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 字段列表 -->
+    <sql id="Base_Column_List">
+        `sku_id, sku_name, product_id, sn, cost, price, market_price, allocated_stock, stock_warning_num, stock_num, promote_vip_price, promote_withgold_price, promote_diamond_price, promote_common_price, whether_promote, promote_start_time, prom_end_time, vip_price, withgold_price, diamond_price, common_price, exchange_point, whether_default, max_commission, reward_point, spec_items, sync_flag, store_no, sync_time, counter_no, counter_name, unit, product_images, version, del_status, create_by, update_by, create_time, update_time`
+    </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_product_sku set del_status = 1, update_by = #{updateBy} WHERE sku_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="queryProductSkuPageList" resultType="ynd.shopping.modular.backend.pojo.vo.ProductSkuListVo">
+        SELECT
+        A.`sku_id` skuId,
+        A.`sku_name` skuName,
+        A.`product_id` productId,
+        A.`sn` sn,
+        A.`cost` cost,
+        A.`price` price,
+        A.`market_price` marketPrice,
+        A.`allocated_stock` allocatedStock,
+        A.`stock_warning_num` stockWarningNum,
+        A.`stock_num` stockNum,
+        A.`weight` weight,
+        A.`promote_vip_price` promoteVipPrice,
+        A.`promote_withgold_price` promoteWithgoldPrice,
+        A.`promote_diamond_price` promoteDiamondPrice,
+        A.`promote_common_price` promoteCommonPrice,
+        A.`whether_promote` whetherPromote,
+        A.`promote_start_time` promoteStartTime,
+        A.`prom_end_time` promEndTime,
+        A.`vip_price` vipPrice,
+        A.`withgold_price` withgoldPrice,
+        A.`diamond_price` diamondPrice,
+        A.`common_price` commonPrice,
+        A.`exchange_point` exchangePoint,
+        A.`whether_default` whetherDefault,
+        A.`max_commission` maxCommission,
+        A.`reward_point` rewardPoint,
+        A.`spec_items` specItems,
+        A.`sync_flag` syncFlag,
+        A.`store_no` storeNo,
+        A.`sync_time` syncTime,
+        A.`counter_no` counterNo,
+        A.`counter_name` counterName,
+        A.`unit` unit,
+        A.`product_images` productImages,
+        A.`version` version,
+        A.`del_status` delStatus,
+        A.`create_by` createBy,
+        A.`update_by` updateBy,
+        A.`create_time` createTime,
+        A.`update_time` updateTime
+        FROM
+        t_product_sku A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="queryProductSkuPageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        t_product_sku A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+    </select>
+
+</mapper>

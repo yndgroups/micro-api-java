@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.AppModuleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.common.entity.AppModuleEntity">
+        <id column="md_id" property="mdId"/>
+        <result column="name" property="name"/>
+        <result column="host" property="host"/>
+        <result column="match_path" property="matchPath"/>
+        <result column="js_path" property="jsPath"/>
+        <result column="css_path" property="cssPath"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 字段列表 -->
+    <sql id="Base_Column_List">
+        `md_id, name, host, match_path, js_path, css_path, del_status, create_by, update_by, create_time, update_time`
+    </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE sys_app_module set del_status = 1, update_by = #{updateBy} WHERE md_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findAppModulePageList" resultType="ynd.common.pojo.vo.AppModuleListVo">
+        SELECT
+        A.`md_id` mdId,
+        A.`name` name,
+        A.`host` host,
+        A.`match_path` matchPath,
+        A.`js_path` jsPath,
+        A.`css_path` cssPath,
+        A.`del_status` delStatus,
+        A.`create_by` createBy,
+        A.`update_by` updateBy,
+        A.`create_time` createTime,
+        A.`update_time` updateTime
+        FROM
+        sys_app_module A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findAppModulePageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        sys_app_module A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据appId查询模块 -->
+    <select id="findAppModuleListByAppId" resultType="ynd.common.pojo.vo.AppModuleListVo">
+        SELECT
+        A.`md_id` mdId,
+        A.`name` name,
+        A.`host` host,
+        A.`match_path` matchPath,
+        A.`js_path` jsPath,
+        A.`css_path` cssPath,
+        A.`del_status` delStatus,
+        A.`create_by` createBy,
+        A.`update_by` updateBy,
+        A.`create_time` createTime,
+        A.`update_time` updateTime
+        FROM
+        sys_app_module A
+        WHERE A.md_id = (SELECT FIND_IN_SET(A.md_id,(SELECT md_id from sys_app B WHERE B.app_id = #{appId})))
+    </select>
+
+</mapper>

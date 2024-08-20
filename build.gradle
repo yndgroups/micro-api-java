@@ -1,0 +1,115 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.3.8.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'com.google.cloud.tools.jib' version '3.1.4'
+}
+
+// 依赖配置
+apply from: 'gradle/config/dependent.gradle'
+
+// 公共账号配置【注意请注意保护私密账号】
+// apply from: 'gradle/config/public.gradle'
+
+apply from: 'gradle/config/private.gradle'
+
+group = 'ynd'
+version = '0.0.1-SNAPSHOT'
+java {
+	sourceCompatibility = JavaVersion.VERSION_11
+}
+
+ext {
+	set('springCloudVersion', "Hoxton.SR12")
+	set('springCloudAlibabaDependencies', "2.2.7.RELEASE")
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+
+
+allprojects {
+	// 远程仓库
+	repositories {
+		maven { url 'https://maven.aliyun.com/repository/jcenter' }
+		maven { url 'https://maven.aliyun.com/repository/google' }
+		maven { url 'https://maven.aliyun.com/repository/central' }
+		maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+		mavenCentral()
+	}
+
+	// 日志
+	gradle.projectsEvaluated {
+		tasks.withType(JavaCompile) {
+			// options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+			// Try to turn them all off automatically
+			// options.compilerArgs << '-Xlint:none'
+			// options.compilerArgs << '-nowarn' // same as '-Xlint:none'
+			// // Turn them off manually
+			// options.compilerArgs << '-Xlint:-auxiliaryclass'
+			// options.compilerArgs << '-Xlint:-cast'
+			// options.compilerArgs << '-Xlint:-classfile'
+			// options.compilerArgs << '-Xlint:-deprecation'
+			// options.compilerArgs << '-Xlint:-dep-ann'
+			// options.compilerArgs << '-Xlint:-divzero'
+			// options.compilerArgs << '-Xlint:-empty'
+			// options.compilerArgs << '-Xlint:-fallthrough'
+			// options.compilerArgs << '-Xlint:-finally'
+			// options.compilerArgs << '-Xlint:-options'
+			// options.compilerArgs << '-Xlint:-overloads'
+			// options.compilerArgs << '-Xlint:-overrides'
+			// options.compilerArgs << '-Xlint:-path'
+			// options.compilerArgs << '-Xlint:-processing'
+			// options.compilerArgs << '-Xlint:-rawtypes'
+			// options.compilerArgs << '-Xlint:-serial'
+			// options.compilerArgs << '-Xlint:-static'
+			// options.compilerArgs << '-Xlint:-try'
+			// options.compilerArgs << '-Xlint:-unchecked'
+			// options.compilerArgs << '-Xlint:-varargs'
+		}
+	}
+}
+
+configurations.all {
+	exclude group: 'org.springframework.boot', module: 'spring-boot-starter-json'
+	exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+	exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+subprojects {
+
+	// apply plugin: 'maven'
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin:  'com.google.cloud.tools.jib'
+
+	version = '1.0.2'
+
+	jar {
+		enabled(false)
+	}
+
+	dependencies {
+		compileOnly(config.lombok)
+		annotationProcessor(config.lombok)
+		implementation config.jwt
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+			mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:$springCloudAlibabaDependencies")
+		}
+	}
+
+}
+
+test {
+	useJUnitPlatform()
+}

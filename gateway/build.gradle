@@ -1,0 +1,70 @@
+jar {
+    manifest {
+        attributes "Main-Class": "ynd.gateway.GatewayApplication"
+    }
+}
+
+bootJar {
+    enabled = true
+}
+
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.5")
+    }
+
+}
+
+configurations.all {
+    exclude group: "org.springframework.boot", module: "spring-boot-starter-web"
+    exclude group: "org.springframework.boot", module: "spring-boot-starter-undertow"
+    exclude group: "mysql", module: "mysql-connector-java"
+    exclude group: "cn.afterturn", module: "easypoi-spring-boot-starter"
+}
+
+dependencies {
+    implementation project(":core")
+    implementation config.javax
+    implementation config.servletApi
+    implementation config.springCloudStarterAlibabaNacosDiscovery
+    implementation config.springCloudStarterAlibabaNacosConfig
+    implementation config.springCloudStarterGateway
+    implementation config.springBootWebflux
+    implementation config.springBootStartRedis
+    implementation config.fastjson
+    implementation config.commonsLang3
+    implementation config.springfoxSwagger3
+//    implementation config.swaggerBootstrapUi
+//    implementation config.swaggerKnife4jUi
+    implementation config.jwt
+    //implementation config.springCloudStarterAlibabaSentinel
+    //implementation config.sentinelDatasourceNacos
+    testImplementation config.junitJupiterApi
+    testRuntimeOnly config.junitJupiterEngine
+}
+
+// 打包镜像
+jib {
+    from {
+        image = "openjdk:11-jre-slim"
+    }
+    to {
+        image = "${account.registryUrl}/${account.registryNamespace}/${project.getName()}"
+        tags = ["latest", "${project.version}".toString()] // tags = ["latest", "${project.version}".toString()]
+        auth {
+            username = "${account.registryUsername}"
+            password = "${account.registryPassword}"
+        }
+    }
+    container {
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        jvmFlags = ["-Xmx512M", "-Xms256M", "-Duser.timezone=Asia/Shanghai", "-Djava.security.egd=file:/dev/./urandom", "-Dfile.encoding=utf-8", "-Duser.timezone=GMT+08"]
+        mainClass = "ynd.gateway.GatewayApplication"
+        ports = ["8100"]
+    }
+}

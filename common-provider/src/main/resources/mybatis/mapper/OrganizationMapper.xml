@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.OrganizationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.common.entity.OrganizationEntity">
+        <id column="org_id" property="orgId"/>
+        <result column="user_id" property="userId"/>
+        <result column="account" property="account"/>
+        <result column="entsource" property="entsource"/>
+        <result column="adduid" property="adduid"/>
+        <result column="name" property="name"/>
+        <result column="logo_purl" property="logoPurl"/>
+        <result column="credit_code" property="creditCode"/>
+        <result column="regaddress" property="regaddress"/>
+        <result column="ent_regno" property="entRegno"/>
+        <result column="license_photo_url" property="licensePhotoUrl"/>
+        <result column="dbtime" property="dbtime"/>
+        <result column="legal_person" property="legalPerson"/>
+        <result column="legal_person_url" property="legalPersonUrl"/>
+        <result column="legal_person_card_nurl" property="legalPersonCardNurl"/>
+        <result column="legal_person_card_purl" property="legalPersonCardPurl"/>
+        <result column="contacts_person" property="contactsPerson"/>
+        <result column="contacts_number" property="contactsNumber"/>
+        <result column="contacts_email" property="contactsEmail"/>
+        <result column="scale_ent" property="scaleEnt"/>
+        <result column="scale_person_min" property="scalePersonMin"/>
+        <result column="scale_person_max" property="scalePersonMax"/>
+        <result column="natures" property="natures"/>
+        <result column="enterprise_visit" property="enterpriseVisit"/>
+        <result column="indtype_ids" property="indtypeIds"/>
+        <result column="indtype_names" property="indtypeNames"/>
+        <result column="welfare" property="welfare"/>
+        <result column="characteristic" property="characteristic"/>
+        <result column="descript" property="descript"/>
+        <result column="jobnum" property="jobnum"/>
+        <result column="audit_state" property="auditState"/>
+        <result column="email" property="email"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="area_name" property="areaName"/>
+        <result column="eaddr_detail" property="eaddrDetail"/>
+        <result column="ent_lng" property="entLng"/>
+        <result column="ent_lat" property="entLat"/>
+        <result column="auditmsg" property="auditmsg"/>
+        <result column="createtime" property="createtime"/>
+        <result column="updatetime" property="updatetime"/>
+        <result column="isdelete" property="isdelete"/>
+        <result column="isrecom" property="isrecom"/>
+        <result column="recom_sort" property="recomSort"/>
+        <result column="ismagnate" property="ismagnate"/>
+        <result column="magnate_sort" property="magnateSort"/>
+        <result column="ishot_ent" property="ishotEnt"/>
+        <result column="hot_ent_sort" property="hotEntSort"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        org_id, user_id, account, entsource, adduid, name, logo_purl, credit_code, regaddress, ent_regno,
+        license_photo_url, dbtime, legal_person, legal_person_url, legal_person_card_nurl, legal_person_card_purl,
+        contacts_person, contacts_number, contacts_email, scale_ent, scale_person_min, scale_person_max, natures,
+        enterprise_visit, indtype_ids, indtype_names, welfare, characteristic, descript, jobnum, audit_state, email,
+        area_code, area_name, eaddr_detail, ent_lng, ent_lat, auditmsg, createtime, updatetime, isdelete, isrecom,
+        recom_sort, ismagnate, magnate_sort, ishot_ent, hot_ent_sort, del_status, create_by, update_by, create_time,
+        update_time
+    </sql>
+
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_organization set del_status = 1, update_by = #{updateBy} WHERE org_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findOrganizationPageList" resultType="ynd.common.pojo.vo.OrganizationListVo"></select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findOrganizationPageListCount" resultType="java.lang.Integer"></select>
+</mapper>

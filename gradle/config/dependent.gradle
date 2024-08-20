@@ -1,0 +1,102 @@
+ext.isRunAlone = false
+
+ext.config = [:]
+def config = [:]
+
+// jdk 11 依赖
+config.javax = 'javax.xml.bind:jaxb-api:2.3.1'
+config.javaxAnnotation = 'javax.annotation:javax.annotation-api:1.3.2'
+config.servletApi = 'javax.servlet:javax.servlet-api:4.0.1'
+//config.javaeeApi = 'javax:javaee-api:7.0'
+
+// springboot
+config.springBootStartWeb = 'org.springframework.boot:spring-boot-starter-web'
+config.springBootStartAop = 'org.springframework.boot:spring-boot-starter-aop'
+config.springBootStartActuator = 'org.springframework.boot:spring-boot-starter-actuator'
+config.springBootStarterUndertow = 'org.springframework.boot:spring-boot-starter-undertow'
+config.springBootStartValidation = 'org.springframework.boot:spring-boot-starter-validation'
+config.springBootStartTest = 'org.springframework.boot:spring-boot-starter-test'
+config.springBootStartRedis = 'org.springframework.boot:spring-boot-starter-data-redis'
+config.springBootStarterJdbc = 'org.springframework.boot:spring-boot-starter-jdbc'
+config.springBootWebflux = 'org.springframework.boot:spring-boot-starter-webflux'
+config.springSecurityJwt = 'org.springframework.security:spring-security-jwt:1.0.8.RELEASE'
+
+// excel
+config.springBootStarterEasypoi = 'cn.afterturn:easypoi-spring-boot-starter:4.1.3'
+
+// pay
+config.paySpringBootStarter = 'com.egzosn:pay-spring-boot-starter:1.0.1-b'
+config.aliPay = 'com.egzosn:pay-java-ali:2.14.1'
+config.wechatPay = 'com.egzosn:pay-java-wx:2.14.1'
+config.fuiouPay = 'com.egzosn:pay-java-fuiou:2.14.1'
+config.youdianPay = 'com.egzosn:pay-java-wx-youdian:2.14.1'
+config.paypalPay = 'com.egzosn:pay-java-paypal:2.14.1'
+config.unionPay = 'com.egzosn:pay-java-union:2.14.1'
+config.payoneerPay = 'com.egzosn:pay-java-payoneer:2.14.1'
+
+// other
+config.payJavaWx = 'com.egzosn:pay-java-wx:2.13.1'
+config.payJavaAli = 'com.egzosn:pay-java-ali:2.13.1'
+config.jfinalWeixin = 'com.jfinal:jfinal-weixin:2.4'
+
+//spring cloud
+config.springCloudStarterOpenfeign = 'org.springframework.cloud:spring-cloud-starter-openfeign'
+config.springCloudStarterSecurity = 'org.springframework.cloud:spring-cloud-starter-security'
+config.springCloudStarterOauth2 = 'org.springframework.cloud:spring-cloud-starter-oauth2'
+config.springCloudStarterGateway = 'org.springframework.cloud:spring-cloud-starter-gateway'
+
+
+// alibaba
+config.springCloudAlibabaSentinelGateway = 'com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway'
+config.sentinelDatasourceNacos = 'com.alibaba.csp:sentinel-datasource-nacos:1.8.0'
+config.springCloudStarterAlibabaSentinel = 'com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel'
+config.springCloudStarterAlibabaNacosDiscovery = 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+config.springCloudStarterAlibabaNacosConfig = 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+
+// db
+config.mysqlJava = 'mysql:mysql-connector-java:8.0.11'
+config.mybatisPlusStarter = 'com.baomidou:mybatis-plus-boot-starter:3.5.2'
+config.mybatisPlus = 'com.baomidou:mybatis-plus:3.5.2'
+config.pagehelper = 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.4'
+
+// plugins
+config.lombok = 'org.projectlombok:lombok:1.18.24'
+config.httpclient = 'org.apache.httpcomponents:httpclient:4.5.3'
+config.commonsLang3 = 'org.apache.commons:commons-lang3:3.6'
+config.commonsDodec = 'commons-codec:commons-codec:1.15'
+config.fastjson = 'com.alibaba:fastjson:1.2.75'
+config.gson = 'com.google.code.gson:gson:2.8.6'
+config.zip4j = 'net.lingala.zip4j:zip4j:1.3.1'
+config.guava = 'com.google.guava:guava:24.0-jre'
+config.jwt = 'io.jsonwebtoken:jjwt:0.9.1'
+config.thumbnailator = 'net.coobird:thumbnailator:0.4.14'
+
+// 文档 - swagger3
+config.springfoxSwagger3 = 'io.springfox:springfox-boot-starter:3.0.0'
+// 文档 - swagger2
+config.springfoxSwagger = 'io.springfox:springfox-swagger2:3.0.0'
+// 文档 - swagger-ui
+config.swaggerUi = 'io.springfox:springfox-swagger-ui:3.0.0'
+// 文档 - swagger-bootstrap-ui
+config.swaggerBootstrapUi = 'com.github.xiaoymin:swagger-bootstrap-ui:1.9.6'
+// 文档 - swagger-bootstrap-ui
+config.swaggerKnife4jUi = 'com.github.xiaoymin:knife4j-openapi2-spring-boot-starter:4.1.0'
+
+
+// 短信发送
+config.aliyunJavaSdkCore = 'com.aliyun:aliyun-java-sdk-core:4.5.20'
+config.aliyunOss = 'com.aliyun.oss:aliyun-sdk-oss:3.13.1'
+config.aliyunJavaSdkDysmsapi = 'com.aliyun:aliyun-java-sdk-dysmsapi:2.1.0'
+
+config.junitJupiterApi = 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+config.junit = 'junit:junit:4.12'
+config.junitJupiterEngine = 'org.junit.jupiter:junit-jupiter-engine'
+
+// 代码生成器
+config.mybatisPlusGenerator = 'com.baomidou:mybatis-plus-generator:3.5.3'
+config.freemarker = 'org.freemarker:freemarker:2.3.31'
+config.slf4j = 'org.slf4j:slf4j-api:1.7.30'
+config.log4j12 = 'org.slf4j:slf4j-log4j12:1.7.30'
+config.log4j = 'log4j:log4j:1.2.17'
+
+ext.config = config

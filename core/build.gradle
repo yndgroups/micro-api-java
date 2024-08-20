@@ -1,0 +1,37 @@
+jar{
+    enabled = true
+}
+
+bootJar {
+    enabled = true
+}
+
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.5")
+    }
+
+}
+
+dependencies {
+    implementation config.springBootStartWeb
+    implementation config.springBootStarterUndertow
+    implementation config.springBootStartRedis
+    implementation config.springBootStartAop
+    implementation config.springSecurityJwt
+    implementation config.fastjson
+    implementation config.javax
+    implementation config.jfinalWeixin
+    implementation config.springCloudStarterAlibabaNacosConfig
+    implementation config.springBootStartValidation
+    implementation config.springfoxSwagger
+    implementation config.commonsLang3
+    implementation config.httpclient
+    implementation config.jwt
+    implementation config.junit
+}

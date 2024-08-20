@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.MiniAppMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.common.entity.MiniAppEntity">
+        <id column="app_id" property="appId"/>
+        <result column="url" property="url"/>
+        <result column="titie" property="titie"/>
+        <result column="describle" property="describle"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        app_id, url, titie, describle, create_by, update_by, create_time, update_time
+    </sql>
+
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE sys_mini_app set del_status = 1, update_by = #{updateBy} WHERE app_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findMiniAppPageList" resultType="ynd.common.pojo.vo.MiniAppListVo"></select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findMiniAppPageListCount" resultType="java.lang.Integer"></select>
+</mapper>

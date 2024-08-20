@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.cms.modular.backend.mapper.ArticleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.cms.modular.backend.entity.ArticleEntity">
+        <id column="art_id" property="artId"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="app_id" property="appId"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="thumb" property="thumb"/>
+        <result column="content" property="content"/>
+        <result column="origin" property="origin"/>
+        <result column="origin_url" property="originUrl"/>
+        <result column="views_count" property="viewsCount"/>
+        <result column="digg" property="digg"/>
+        <result column="stamp" property="stamp"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 字段列表 -->
+    <sql id="Base_Column_List">
+        art_id
+        , category_id, app_id, title, description, thumb, content, origin, origin_url, views_count, digg, stamp, del_status, create_by, update_by, create_time, update_time
+    </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_article set del_status = 1, update_by = #{updateBy} WHERE art_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findArticlePageList" resultType="ynd.cms.modular.backend.pojo.vo.ArticleListVo">
+        SELECT
+        A.`art_id` artId,
+        A.`category_id` categoryId,
+        A.`app_id` appId,
+        A.`title` title,
+        A.`description` description,
+        A.`thumb` thumb,
+        A.`origin` origin,
+        A.`origin_url` originUrl,
+        A.`views_count` viewsCount,
+        A.`digg` digg,
+        A.`stamp` stamp,
+        A.`del_status` delStatus,
+        A.`create_by` createBy,
+        A.`update_by` updateBy,
+        A.`create_time` createTime,
+        A.`update_time` updateTime
+        FROM
+        t_article A
+        <where>
+            A.del_status = 0 AND  A.`category_id` = #{params.categoryId}
+            <if test="params != null">
+                <if test="params.title != null and params.title != ''">
+                    AND A.`title` like concat("%",#{params.title},"%")
+                </if>
+                <if test="params.content != null and params.content != ''">
+                    AND A.`content` like concat("%",#{params.content},"%")
+                </if>
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findArticlePageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        t_article A
+        <where>
+            A.del_status = 0 AND  A.`category_id` = #{params.categoryId}
+            <if test="params != null">
+                <if test="params.title != null and params.title != ''">
+                    AND A.`title` like concat("%",#{params.title},"%")
+                </if>
+                <if test="params.content != null and params.content != ''">
+                    AND A.`content` like concat("%",#{params.content},"%")
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

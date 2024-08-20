@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.shopping.modular.backend.mapper.ProductMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.shopping.modular.backend.entity.ProductEntity">
+        <id column="product_id" property="productId"/>
+        <result column="product_category_id" property="productCategoryId"/>
+        <result column="store_id" property="storeId"/>
+        <result column="store_product_category_id" property="storeProductCategoryId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="business_id" property="businessId"/>
+        <result column="template_id" property="templateId"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+        <result column="caption" property="caption"/>
+        <result column="keyword" property="keyword"/>
+        <result column="introduction" property="introduction"/>
+        <result column="para_items" property="paraItems"/>
+        <result column="spec_items" property="specItems"/>
+        <result column="images" property="images"/>
+        <result column="store_no" property="storeNo"/>
+        <result column="business_name" property="businessName"/>
+        <result column="whether_effective" property="whetherEffective"/>
+        <result column="whether_delivery" property="whetherDelivery"/>
+        <result column="whether_list" property="whetherList"/>
+        <result column="whether_marketable" property="whetherMarketable"/>
+        <result column="whether_top" property="whetherTop"/>
+        <result column="max_commission" property="maxCommission"/>
+        <result column="memo" property="memo"/>
+        <result column="hits" property="hits"/>
+        <result column="week_hits" property="weekHits"/>
+        <result column="week_hits_date" property="weekHitsDate"/>
+        <result column="month_hits" property="monthHits"/>
+        <result column="month_hits_date" property="monthHitsDate"/>
+        <result column="month_sales" property="monthSales"/>
+        <result column="month_sales_date" property="monthSalesDate"/>
+        <result column="sales" property="sales"/>
+        <result column="score" property="score"/>
+        <result column="score_count" property="scoreCount"/>
+        <result column="total_score" property="totalScore"/>
+        <result column="type" property="type"/>
+        <result column="unit" property="unit"/>
+        <result column="week_sales" property="weekSales"/>
+        <result column="week_sales_date" property="weekSalesDate"/>
+        <result column="erp_flag" property="erpFlag"/>
+        <result column="internal_number" property="internalNumber"/>
+        <result column="promote_sales" property="promoteSales"/>
+        <result column="sync_flag" property="syncFlag"/>
+        <result column="sync_time" property="syncTime"/>
+        <result column="counter_no" property="counterNo"/>
+        <result column="counter_name" property="counterName"/>
+        <result column="note_ids" property="noteIds"/>
+        <result column="begin_date" property="beginDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="note_contents" property="noteContents"/>
+        <result column="prom_start_time" property="promStartTime"/>
+        <result column="prom_end_time" property="promEndTime"/>
+        <result column="more_freight" property="moreFreight"/>
+        <result column="promotion_flag" property="promotionFlag"/>
+        <result column="stock_flag" property="stockFlag"/>
+        <result column="area_lock" property="areaLock"/>
+        <result column="area_ids" property="areaIds"/>
+        <result column="status" property="status"/>
+        <result column="version" property="version"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 字段列表 -->
+    <sql id="Base_Column_List">
+        `product_id, product_category_id, store_id, store_product_category_id, brand_id, business_id, template_id, sn, name, caption, keyword, introduction, para_items, spec_items, images, store_no, business_name, whether_effective, whether_delivery, whether_list, whether_marketable, whether_top, max_commission, memo, hits, week_hits, week_hits_date, month_hits, month_hits_date, month_sales, month_sales_date, sales, score, score_count, total_score, type, unit, week_sales, week_sales_date, weight, erp_flag, internal_number, promote_sales, sync_flag, sync_time, counter_no, counter_name, note_ids, begin_date, end_date, note_contents, prom_start_time, prom_end_time, more_freight, promotion_flag, stock_flag, area_lock, area_ids, status, version, del_status, create_by, update_by, create_time, update_time`
+    </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_product set del_status = 1, update_by = #{updateBy} WHERE product_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findProductPageList" resultType="ynd.shopping.modular.backend.pojo.vo.ProductListVo">
+        SELECT
+        A.`product_id` productId,
+        A.`product_category_id` productCategoryId,
+        A.`store_id` storeId,
+        A.`store_product_category_id` storeProductCategoryId,
+        A.`brand_id` brandId,
+        A.`business_id` businessId,
+        A.`template_id` templateId,
+        A.`sn` sn,
+        A.`name` name,
+        A.`caption` caption,
+        A.`keyword` keyword,
+        A.`para_items` paraItems,
+        A.`spec_items` specItems,
+        A.`images` images,
+        A.`store_no` storeNo,
+        A.`business_name` businessName,
+        A.`whether_effective` whetherEffective,
+        A.`whether_delivery` whetherDelivery,
+        A.`whether_list` whetherList,
+        A.`whether_marketable` whetherMarketable,
+        A.`whether_top` whetherTop,
+        A.`max_commission` maxCommission,
+        A.`memo` memo,
+        A.`hits` hits,
+        A.`week_hits` weekHits,
+        A.`week_hits_date` weekHitsDate,
+        A.`month_hits` monthHits,
+        A.`month_hits_date` monthHitsDate,
+        A.`month_sales` monthSales,
+        A.`month_sales_date` monthSalesDate,
+        A.`sales` sales,
+        A.`score` score,
+        A.`score_count` scoreCount,
+        A.`total_score` totalScore,
+        A.`type` type,
+        A.`unit` unit,
+        A.`week_sales` weekSales,
+        A.`week_sales_date` weekSalesDate,
+        A.`erp_flag` erpFlag,
+        A.`internal_number` internalNumber,
+        A.`promote_sales` promoteSales,
+        A.`sync_flag` syncFlag,
+        A.`sync_time` syncTime,
+        A.`counter_no` counterNo,
+        A.`counter_name` counterName,
+        A.`note_ids` noteIds,
+        A.`begin_date` beginDate,
+        A.`end_date` endDate,
+        A.`note_contents` noteContents,
+        A.`prom_start_time` promStartTime,
+        A.`prom_end_time` promEndTime,
+        A.`more_freight` moreFreight,
+        A.`promotion_flag` promotionFlag,
+        A.`stock_flag` stockFlag,
+        A.`area_lock` areaLock,
+        A.`area_ids` areaIds,
+        A.`status` status,
+        A.`version` version,
+        A.`del_status` delStatus,
+        A.`create_by` createBy,
+        A.`update_by` updateBy,
+        A.`create_time` createTime,
+        A.`update_time` updateTime
+        FROM
+        t_product A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.name != null and params.name != ''">
+                    AND A.`name` like CONCAT('%',#{params.name},'%')
+                </if>
+                <if test="params.caption != null and params.caption != ''">
+                    AND A.`caption` like CONCAT('%',#{caption},'%')
+                </if>
+                <if test="params.keyword != null and params.keyword != ''">
+                    AND A.`keyword` like CONCAT('%',#{keyword},'%')
+                </if>
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findProductPageListCount" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_product A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.name != null and params.name != ''">
+                    AND A.`name` like CONCAT('%',#{params.name},'%')
+                </if>
+                <if test="params.caption != null and params.caption != ''">
+                    AND A.`caption` like CONCAT('%',#{caption},'%')
+                </if>
+                <if test="params.keyword != null and params.keyword != ''">
+                    AND A.`keyword` like CONCAT('%',#{keyword},'%')
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

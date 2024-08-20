@@ -1,0 +1,7 @@
+spring.profiles.active=当前激活环境
+spring.application.name=应用名称
+spring.cloud.nacos.config.server-addr=配置文件地址
+spring.cloud.nacos.config.file-extension=yaml
+spring.cloud.nacos.config.prefix=${r"${spring.application.name}"}-${r"${spring.profiles.active}"}
+spring.cloud.nacos.config.group=配置文件所在的组名
+spring.cloud.nacos.config.namespace=配置文件命名空间

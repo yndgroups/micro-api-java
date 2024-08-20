@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: cms
+  cloud:
+    nacos:
+      config:
+        prefix: ${spring.application.name}
+        group: java_${spring.profiles.active}
+        file-extension: yaml
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 31fddf85-cad8-44f4-af79-0d93913807f3
+---
+spring:
+  profiles: test
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 92f989a1-1dad-4e34-86b6-647030e58743
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 5c419d0c-0abf-4857-b044-6ced7413106d

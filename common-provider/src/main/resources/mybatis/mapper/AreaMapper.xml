@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.AreaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.common.entity.AreaEntity">
+        <id column="area_code" property="areaCode"/>
+        <result column="area_id" property="areaId"/>
+        <result column="area_name" property="areaName"/>
+        <result column="area_tag" property="areaTag"/>
+        <result column="parent_code" property="parentCode"/>
+        <result column="full_area_name" property="fullAreaName"/>
+        <result column="year" property="year"/>
+        <result column="is_standard" property="isStandard"/>
+        <result column="like_column" property="likeColumn"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        area_id, area_code, area_name, area_tag, parent_code, full_area_name, `year`, is_standard, like_column,
+        del_status, create_by, update_by, create_time, update_time
+    </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE sys_area set del_status = 1, update_by = #{updateBy} WHERE area_code IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 地区分页列表查询 -->
+    <select id="findAreaPageList" resultType="ynd.common.pojo.vo.AreaListVo">
+        SELECT
+        A.area_id areaId,
+        A.area_code areaCode,
+        A.area_name areaName,
+        A.area_tag areaTag,
+        A.parent_code parentCode,
+        A.full_area_name fullAreaName,
+        A.`year`,
+        A.is_standard isStandard,
+        A.like_column likeColumn,
+        A.del_status delStatus,
+        A.create_by createBy,
+        A.update_by updateBy,
+        A.create_time createTime,
+        A.update_time updateTime
+        FROM
+        sys_area A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.areaName != null and params.areaName != ''">
+                    and A.area_name like concat("%",#{params.areaName},"%")
+                </if>
+                <if test="params.areaCode != null and params.areaCode != ''">
+                    and A.area_code like concat("%",#{params.areaCode},"%")
+                </if>
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 地区分页列表总数查询 -->
+    <select id="findAreaPageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        sys_area A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.areaName != null and params.areaName != ''">
+                    and A.area_name like concat("%",#{params.areaName},"%")
+                </if>
+                <if test="params.areaCode != null and params.areaCode != ''">
+                    and A.area_code like concat("%",#{params.areaCode},"%")
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据父级编码查询下级列表 -->
+    <select id="findAreaListByParentCode" resultType="ynd.common.pojo.vo.AreaListVo">
+        SELECT
+        A.area_id areaId,
+        A.area_code areaCode,
+        A.area_name areaName,
+        A.area_tag areaTag,
+        A.parent_code parentCode,
+        A.full_area_name fullAreaName,
+        A.`year`,
+        A.is_standard isStandard,
+        A.create_by createBy,
+        A.update_by updateBy,
+        A.create_time createTime,
+        A.update_time updateTime
+        FROM
+        sys_area A
+        WHERE
+        parent_code = #{parentCode}
+    </select>
+
+</mapper>

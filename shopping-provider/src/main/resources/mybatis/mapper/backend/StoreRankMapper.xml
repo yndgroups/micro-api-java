@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.shopping.modular.backend.mapper.StoreRankMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.shopping.modular.backend.entity.StoreRankEntity">
+        <id column="store_rank_id" property="storeRankId"/>
+        <result column="version" property="version"/>
+        <result column="sort_by" property="sortBy"/>
+        <result column="whether_allow_register" property="whetherAllowRegister"/>
+        <result column="memo" property="memo"/>
+        <result column="name" property="name"/>
+        <result column="quantity" property="quantity"/>
+        <result column="service_fee" property="serviceFee"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        store_rank_id, version, sort_by, whether_allow_register, memo, `name`, quantity, service_fee, del_status, create_by, update_by, create_time, update_time
+    </sql>
+
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_store_rank set del_status = 1, update_by = #{updateBy} WHERE store_rank_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="queryStoreRankPageList" resultType="ynd.shopping.modular.backend.pojo.vo.StoreRankListVo">
+        SELECT
+        A.store_rank_id storeRankId,
+        A.whether_allow_register whetherAllowRegister,
+        A.name,
+        A.quantity,
+        A.service_fee serviceFee,
+        A.sort_by sortBy,
+        A.del_status delStatus,
+        A.create_by createBy,
+        A.update_by updateBy,
+        A.create_time createTime,
+        A.update_time updateTime
+        FROM
+        t_store_rank A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.name != null and params.name != ''">
+                    AND A.`name` like concat("%",#{params.name},"%")
+                </if>
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="queryStoreRankPageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        t_store_rank A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.name != null and params.name != ''">
+                    AND A.`name` like concat("%",#{params.name},"%")
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>

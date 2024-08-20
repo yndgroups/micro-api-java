@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.shopping.modular.frontend.mapper.ProductCategoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.shopping.modular.frontend.entity.ProductCategoryEntity">
+                <id column="product_category_id" property="productCategoryId"/>
+                <result column="parent_id" property="parentId"/>
+                <result column="name" property="name"/>
+                <result column="self_rate" property="selfRate"/>
+                <result column="profit_sharing" property="profitSharing"/>
+                <result column="sort_by" property="sortBy"/>
+                <result column="version" property="version"/>
+                <result column="del_status" property="delStatus"/>
+                <result column="create_by" property="createBy"/>
+                <result column="update_by" property="updateBy"/>
+                <result column="create_time" property="createTime"/>
+                <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 字段列表 -->
+        <sql id="Base_Column_List">
+        product_category_id, parent_id, name, self_rate, profit_sharing, sort_by, version, del_status, create_by, update_by, create_time, update_time
+        </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_product_category set del_status = 1, update_by = #{updateBy} WHERE product_category_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findProductCategoryPageList" resultType="ynd.shopping.modular.frontend.pojo.vo.ProductCategoryListVo">
+        SELECT
+            A.`product_category_id` productCategoryId,
+            A.`parent_id` parentId,
+            A.`name` name,
+            A.`self_rate` selfRate,
+            A.`profit_sharing` profitSharing,
+            A.`sort_by` sortBy,
+            A.`version` version,
+            A.`del_status` delStatus,
+            A.`create_by` createBy,
+            A.`update_by` updateBy,
+            A.`create_time` createTime,
+            A.`update_time` updateTime
+        FROM
+            t_product_category A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findProductCategoryPageListCount" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_product_category A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+    </select>
+
+</mapper>

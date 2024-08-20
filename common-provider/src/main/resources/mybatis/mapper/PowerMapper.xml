@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.PowerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.common.entity.PowerEntity">
+        <id column="power_id" property="powerId"/>
+        <result column="user_id" property="userId"/>
+        <result column="app_id" property="appId"/>
+        <result column="role_id" property="roleId"/>
+        <result column="area" property="area"/>
+        <result column="projects" property="projects"/>
+        <result column="credit_code" property="creditCode"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        power_id, user_id, app_id, role_id, area, projects, credit_code, del_status, create_by, update_by, create_time,
+        update_time
+    </sql>
+
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE sys_power set del_status = 1, update_by = #{updateBy} WHERE power_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findPowerPageList" resultType="ynd.common.pojo.vo.PowerListVo"></select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findPowerPageListCount" resultType="java.lang.Integer"></select>
+</mapper>

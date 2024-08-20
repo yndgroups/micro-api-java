@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: common
+  cloud:
+    nacos:
+      config:
+        prefix: ${spring.application.name}
+        group: java_${spring.profiles.active}
+        file-extension: yaml
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 31fddf85-cad8-44f4-af79-0d93913807f3
+---
+spring:
+  profiles: test
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 31fddf85-cad8-44f4-af79-0d93913807f3
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 31fddf85-cad8-44f4-af79-0d93913807f3

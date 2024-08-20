@@ -1,0 +1,50 @@
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      config:
+        prefix: ${spring.application.name}
+        group: java_${spring.profiles.active}
+        file-extension: yaml
+
+swagger:
+  production: true
+  basic:
+    enable: true
+    username: admin
+    password: yndAdmin
+
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 31fddf85-cad8-44f4-af79-0d93913807f3
+---
+spring:
+  profiles: test
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: test.npwl.shop:8848
+        namespace: f39245a9-a438-42be-b9c0-4c7bc202ec43
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 64048986-465a-48d1-ad35-9975c2ad8f56

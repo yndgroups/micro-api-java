@@ -1,0 +1,64 @@
+jar {
+    manifest {
+        attributes "Main-Class": "ynd.common.CommonApplication"
+    }
+}
+
+bootJar {
+    enabled = true
+}
+
+// 构建
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.5")
+    }
+}
+
+// 依赖
+dependencies {
+    implementation project(":core")
+    implementation config.javax
+    implementation config.springCloudStarterAlibabaNacosDiscovery
+    implementation config.springCloudStarterAlibabaNacosConfig
+    implementation config.springCloudStarterOpenfeign
+    implementation config.springBootStartValidation
+    implementation config.springBootStarterEasypoi
+    implementation config.springBootStarterUndertow
+    implementation config.springBootStarterJdbc
+    implementation config.springBootStartRedis
+    implementation config.mybatisPlusStarter
+    implementation config.mybatisPlus
+    implementation config.mysqlJava
+    implementation config.fastjson
+    implementation config.httpclient
+    implementation config.commonsLang3
+    implementation config.springfoxSwagger
+    implementation config.swaggerBootstrapUi
+    implementation config.springCloudStarterAlibabaSentinel
+    implementation config.sentinelDatasourceNacos
+    testImplementation config.junit
+}
+
+jib {
+    from {
+        image = "openjdk:11-jre-slim"
+    }
+    to {
+        image = "${account.registryUrl}/${account.registryNamespace}/${project.getName()}"
+        tags = ["${project.version}".toString()] // tags = ["latest", "${project.version}".toString()]
+        auth {
+            username = "${account.registryUsername}"
+            password = "${account.registryPassword}"
+        }
+    }
+    container {
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        jvmFlags = ["-Xmx512M", "-Xms256M", "-Duser.timezone=Asia/Shanghai", "-Djava.security.egd=file:/dev/./urandom", "-Dfile.encoding=utf-8", "-Duser.timezone=GMT+08"]
+        mainClass = "ynd.common.CommonApplication"
+        ports = ["8200"]
+    }
+}

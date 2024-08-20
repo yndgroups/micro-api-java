@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.PayConfMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.core.model.PayConf">
+        <id column="conf_id" property="confId"/>
+        <result column="app_name" property="appName"/>
+        <result column="app_id" property="appId"/>
+        <result column="app_secret" property="appSecret"/>
+        <result column="mch_id" property="mchId"/>
+        <result column="pater_ner_key" property="paterNerKey"/>
+        <result column="notify_url" property="notifyUrl"/>
+        <result column="return_url" property="returnUrl"/>
+        <result column="js_api_ticket" property="jsApiTicket"/>
+        <result column="token" property="token"/>
+        <result column="amount" property="amount"/>
+        <result column="msg_data_format" property="msgDataFormat"/>
+        <result column="aes_key" property="aesKey"/>
+        <result column="timestamp" property="timestamp"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        conf_id
+        , app_name, app_id, app_secret, mch_id, pater_ner_key, notify_url, return_url, js_api_ticket, token, amount,
+        msg_data_format, aes_key, `timestamp`, del_status, create_by, update_by, create_time, update_time
+    </sql>
+
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE sys_pay_conf set del_status = 1, update_by = #{updateBy} WHERE conf_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="findPayConfPageList" resultType="ynd.common.pojo.vo.PayConfListVo">
+        SELECT A.conf_id confId,
+        A.app_name appName,
+        A.from_app_id fromAppId,
+        A.app_id appId,
+        A.app_secret appSecret,
+        A.mch_id mchId,
+        A.pater_ner_key paterNerKey,
+        A.notify_url notifyUrl,
+        A.return_url returnUrl,
+        A.js_api_ticket jsApiTicket,
+        A.token,
+        A.amount,
+        A.msg_data_format msgDataFormat,
+        A.aes_key aesKey,
+        A.`timestamp`,
+        A.del_status delStatus,
+        A.create_by createBy,
+        A.update_by updateBy,
+        A.create_time createTime,
+        A.update_time updateTime
+        FROM
+        sys_pay_conf A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.appId != null and params.appId != ''">
+                    and A.`from_app_id` = #{params.appId}
+                </if>
+            </if>
+            <!-- <if test="auth != null">
+                <if test="auth.accountType != null and auth.accountType != '' and auth.accountType != 1">
+                    and create_by = #{auth.userId}
+                </if>
+            </if> -->
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="findPayConfPageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        sys_pay_conf A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+                <if test="params.appId != null and params.appId != ''">
+                    and A.`from_app_id` = #{params.appId}
+                </if>
+            </if>
+            <!-- <if test="auth != null">
+                <if test="auth.accountType != null and auth.accountType != '' and auth.accountType != 1">
+                    and create_by = #{auth.userId}
+                </if>
+            </if> -->
+        </where>
+    </select>
+</mapper>

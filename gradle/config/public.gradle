@@ -1,0 +1,12 @@
+ext.isRunAlone = false
+
+ext.account = [:]
+def account = [:]
+
+// 阿里云镜像
+account.registryUrl = 'registry.cn-hangzhou.aliyuncs.com'
+account.registryNamespace = 'namespace'
+account.registryUsername = 'username'
+account.registryPassword = 'password'
+
+ext.account = account

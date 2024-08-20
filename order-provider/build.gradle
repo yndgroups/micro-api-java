@@ -1,0 +1,79 @@
+jar {
+    manifest {
+        attributes "Main-Class": "ynd.order.OrderApplication"
+    }
+}
+
+
+// 打成jar包
+bootJar {
+    enabled = true
+}
+
+// 构建
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.5")
+    }
+}
+
+// 依赖
+dependencies {
+    implementation project(":core")
+    implementation config.javax
+    implementation config.javaxAnnotation
+    implementation config.springCloudStarterAlibabaNacosDiscovery
+    implementation config.springCloudStarterAlibabaNacosConfig
+    implementation config.springCloudStarterOpenfeign
+    implementation config.springBootStartValidation
+    implementation config.springBootStarterEasypoi
+    implementation config.springBootStarterUndertow
+    implementation config.springBootStarterJdbc
+    implementation config.springBootStartRedis
+    implementation config.mybatisPlus
+    implementation config.mysqlJava
+
+    // pay
+    implementation config.paySpringBootStarter
+    implementation config.aliPay
+    implementation config.wechatPay
+    implementation config.fuiouPay
+    implementation config.youdianPay
+    implementation config.paypalPay
+    implementation config.unionPay
+    implementation config.payoneerPay
+
+    implementation config.fastjson
+    implementation config.httpclient
+    implementation config.commonsLang3
+    implementation config.springfoxSwagger
+    implementation config.swaggerBootstrapUi
+    implementation config.springCloudStarterAlibabaSentinel
+    implementation config.sentinelDatasourceNacos
+    testImplementation config.junitJupiterApi
+    testRuntimeOnly config.junitJupiterEngine
+}
+
+// 打包镜像
+jib {
+    from {
+        image = "openjdk:11-jre-slim"
+    }
+    to {
+        image = "${account.registryUrl}/${account.registryNamespace}/${project.getName()}"
+        tags = ["${project.version}".toString()] // tags = ["latest", "${project.version}".toString()]
+        auth {
+            username = "${account.registryUsername}"
+            password = "${account.registryPassword}"
+        }
+    }
+    container {
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        jvmFlags = ["-Xmx512M", "-Xms256M", "-Duser.timezone=Asia/Shanghai", "-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=dev", "-Dfile.encoding=utf-8", "-Duser.timezone=GMT+08"]
+        mainClass = "ynd.order.OrderApplication"
+        ports = ["8800"]
+    }
+}

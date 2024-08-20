@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.common.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.common.entity.UserEntity">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="phone" property="phone"/>
+        <result column="open_id" property="openId"/>
+        <result column="status" property="status"/>
+        <result column="reasons_prohibition" property="reasonsProhibition"/>
+        <result column="account_type" property="accountType"/>
+        <result column="source_id" property="sourceId"/>
+        <result column="reg_type" property="regType"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, user_name, user_password, phone, open_id, `status`, reasons_prohibition, account_type, source_id,
+        reg_type, del_status, create_by, update_by, create_time, update_time
+    </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE sys_user set del_status = 1, update_by = #{updateBy} WHERE user_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 用户分页列表查询 -->
+    <select id="findUserPageList" resultType="ynd.common.pojo.vo.UserListVo">
+        SELECT
+        A.user_id userId,
+        A.user_name userName,
+        A.user_password userPassword,
+        A.phone,
+        A.open_id openId,
+        A.`status`,
+        A.reasons_prohibition reasonsProhibition,
+        A.account_type,
+        A.source_id sourceId,
+        A.reg_type regType,
+        B.`name` appName
+        FROM
+        sys_user A LEFT JOIN sys_app B ON A.source_id = B.app_id
+        <where>
+            A.del_status = 0
+        </where>
+        ORDER BY A.create_time
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 用户分页列表总数查询 -->
+    <select id="findUserPageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        sys_user A
+        <where>
+            A.del_status = 0
+        </where>
+    </select>
+
+    <!-- 查询用户授权角色id -->
+    <select id="queryRoleIds" resultType="java.lang.String">
+        SELECT role_id roleId from sys_user_role WHERE app_id = #{appId} AND user_id = #{userId}
+    </select>
+
+    <!-- 用户关联角色 -->
+    <insert id="userRelation">
+        INSERT INTO sys_user_role(user_id, role_id, app_id, create_by) VALUES
+        <foreach collection="roleIds" item="roleId" index="index" separator=",">
+            (#{userId},#{roleId},#{appId},#{createBy})
+        </foreach>
+    </insert>
+
+
+    <!-- 删除应用和用户名下的角色 -->
+    <delete id="deleteUserRelation">
+        DELETE FROM sys_user_role WHERE user_id = #{userId} AND app_id = #{appId}
+    </delete>
+
+    <!-- 插入关联应用 -->
+    <insert id="userRelationApp">
+        INSERT INTO sys_user_app(user_id, app_id, create_by) VALUES (#{userId}, #{appId}, #{createBy})
+    </insert>
+
+    <!-- 查询是否关联应用 -->
+    <select id="selectUserRelationApp" resultType="java.lang.Long">
+        SELECT app_id FROM sys_user_app WHERE user_id = #{userId} AND app_id = #{appId}
+    </select>
+
+</mapper>

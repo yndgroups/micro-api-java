@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+rootProject.name = 'ynd-backend-api'
+include 'core';
+include 'gateway';
+include 'generator';
+include 'common-provider';
+include 'file-provider';
+include 'order-provider';
+include 'shopping-provider';
+include 'cms-provider';

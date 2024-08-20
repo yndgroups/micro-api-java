@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ynd.shopping.modular.backend.mapper.InventoryRecordMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ynd.shopping.modular.backend.entity.InventoryRecordEntity">
+        <id column="inventory_record_id" property="inventoryRecordId"/>
+        <result column="in_quantity" property="inQuantity"/>
+        <result column="out_quantity" property="outQuantity"/>
+        <result column="current_inventory" property="currentInventory"/>
+        <result column="type" property="type"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="memo" property="memo"/>
+        <result column="version" property="version"/>
+        <result column="del_status" property="delStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 字段列表 -->
+    <sql id="Base_Column_List">
+        inventory_record_id
+        , in_quantity, out_quantity, current_inventory, `type`, sku_id, memo, version, del_status, create_by, update_by, create_time, update_time
+    </sql>
+
+    <!-- 逻辑删除 -->
+    <update id="logicalDelete" parameterType="java.lang.Object">
+        UPDATE t_inventory_record set del_status = 1, update_by = #{updateBy}
+        WHERE inventory_record_id IN
+        <foreach collection="ids" item="itemId" separator="," open="(" close=")">
+            #{itemId}
+        </foreach>
+    </update>
+
+    <!-- 分页列表查询 -->
+    <select id="queryInventoryRecordPageList"
+            resultType="ynd.shopping.modular.backend.pojo.vo.InventoryRecordListVo">
+        SELECT
+        A.`inventory_record_id` inventoryRecordId,
+        A.`in_quantity` inQuantity,
+        A.`out_quantity` outQuantity,
+        A.`current_inventory` currentInventory,
+        A.`type` type,
+        A.`sku_id` skuId,
+        A.`memo` memo,
+        A.`version` version,
+        A.`del_status` delStatus,
+        A.`create_by` createBy,
+        A.`update_by` updateBy,
+        A.`create_time` createTime,
+        A.`update_time` updateTime
+        FROM
+        t_inventory_record A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+        ORDER BY A.create_time DESC
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 分页列表总数查询 -->
+    <select id="queryInventoryRecordPageListCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        t_inventory_record A
+        <where>
+            A.del_status = 0
+            <if test="params != null">
+            </if>
+        </where>
+    </select>
+
+</mapper>
